@@ -16,4 +16,7 @@ class FirebaseRepository {
 
   // if new user, regist of new user in DB(firebase firestore)
   Future<void> addDataToDb(User user) => _firebaseMethos.addDataToDb(user);
+
+  // for sign out
+  Future<void> signOut() => _firebaseMethos.signOut();
 }

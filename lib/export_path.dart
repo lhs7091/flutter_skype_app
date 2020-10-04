@@ -7,3 +7,4 @@ export './screens/login_screen.dart';
 export './models/apply_user.dart';
 
 export './utils/utilities.dart';
+export './utils/universal_variables.dart';

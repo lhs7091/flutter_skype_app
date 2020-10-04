@@ -60,4 +60,10 @@ class FirebaseMethos {
         .doc(currentUser.uid)
         .set(skypeUser.toMap(skypeUser));
   }
+
+  Future<void> signOut() async {
+    await _googleSignIn.disconnect();
+    await _googleSignIn.signOut();
+    return await _auth.signOut();
+  }
 }
