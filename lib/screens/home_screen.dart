@@ -34,11 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: UniversalVariables.blackColor,
       body: PageView(
         children: [
-          Center(
-            child: Text(
-              'Chat List Screen',
-              style: TextStyle(color: Colors.white),
-            ),
+          Container(
+            child: ChatListScreen(),
           ),
           Center(
             child: Text(
