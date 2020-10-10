@@ -19,4 +19,8 @@ class FirebaseRepository {
 
   // for sign out
   Future<void> signOut() => _firebaseMethos.signOut();
+
+  // for all user list except of me
+  Future<List<SkypeUser>> fetchAllUsers(User currentUser) =>
+      _firebaseMethos.fetchAllUsers(currentUser);
 }

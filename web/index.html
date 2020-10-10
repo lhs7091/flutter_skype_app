@@ -5,6 +5,8 @@
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A new Flutter project.">
 
+  <meta name="google-signin-client_id" content="781775637550-q7judapl9idvlph5j3i7h8r7bg437ldg.apps.googleusercontent.com" />
+
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -16,11 +18,30 @@
 
   <title>flutter_skype_app</title>
   <link rel="manifest" href="manifest.json">
-</head>
-<body>
+<body>  
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+   <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+        <script src="https://www.gstatic.com/firebasejs/7.22.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.22.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.22.0/firebase-firestore.js"></script>
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyBW8QzC40cuKIGEaYQRjnZhfYfRMT0z5O4",
+      authDomain: "flutter-skype-app-1914c.firebaseapp.com",
+      databaseURL: "https://flutter-skype-app-1914c.firebaseio.com",
+      projectId: "flutter-skype-app-1914c",
+      storageBucket: "flutter-skype-app-1914c.appspot.com",
+      messagingSenderId: "972489818525",
+      appId: "1:972489818525:web:cfc134da1389a3222fef74"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function () {
@@ -30,4 +51,5 @@
   </script>
   <script src="main.dart.js" type="application/javascript"></script>
 </body>
+ 
 </html>

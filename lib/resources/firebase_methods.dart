@@ -66,4 +66,17 @@ class FirebaseMethos {
     await _googleSignIn.signOut();
     return await _auth.signOut();
   }
+
+  // call all user list except of me and return
+  Future<List<SkypeUser>> fetchAllUsers(User currentUser) async {
+    List<SkypeUser> userList = List<SkypeUser>();
+
+    QuerySnapshot querySnapshot = await firestore.collection("users").get();
+    querySnapshot.docs.forEach((element) {
+      if (element.id != currentUser.uid) {
+        userList.add(SkypeUser.fromMap(element.data()));
+      }
+    });
+    return userList;
+  }
 }
