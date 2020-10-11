@@ -36,8 +36,8 @@ class FirebaseMethos {
 
   Future<bool> authenticateUser(User user) async {
     QuerySnapshot result = await FirebaseFirestore.instance
-        .collection("users")
-        .where("email", isEqualTo: user.email)
+        .collection(USERS_COLLECTION)
+        .where(EMAIL_FIELD, isEqualTo: user.email)
         .get();
 
     final List<DocumentSnapshot> docs = result.docs;
@@ -56,7 +56,7 @@ class FirebaseMethos {
     );
 
     firestore
-        .collection("users")
+        .collection(USERS_COLLECTION)
         .doc(currentUser.uid)
         .set(skypeUser.toMap(skypeUser));
   }
@@ -71,12 +71,30 @@ class FirebaseMethos {
   Future<List<SkypeUser>> fetchAllUsers(User currentUser) async {
     List<SkypeUser> userList = List<SkypeUser>();
 
-    QuerySnapshot querySnapshot = await firestore.collection("users").get();
+    QuerySnapshot querySnapshot =
+        await firestore.collection(USERS_COLLECTION).get();
     querySnapshot.docs.forEach((element) {
       if (element.id != currentUser.uid) {
         userList.add(SkypeUser.fromMap(element.data()));
       }
     });
     return userList;
+  }
+
+  Future<void> addMessageToDb(
+      Message message, SkypeUser sender, SkypeUser receiver) async {
+    var map = message.toMap();
+
+    await firestore
+        .collection(MESSAGES_COLLECTION)
+        .doc(message.senderId)
+        .collection(message.receiverId)
+        .add(map);
+
+    return await firestore
+        .collection(MESSAGES_COLLECTION)
+        .doc(message.receiverId)
+        .collection(message.senderId)
+        .add(map);
   }
 }

@@ -23,4 +23,8 @@ class FirebaseRepository {
   // for all user list except of me
   Future<List<SkypeUser>> fetchAllUsers(User currentUser) =>
       _firebaseMethos.fetchAllUsers(currentUser);
+
+  Future<void> addMessageToDb(
+          Message message, SkypeUser sender, SkypeUser receiver) =>
+      _firebaseMethos.addMessageToDb(message, sender, receiver);
 }
