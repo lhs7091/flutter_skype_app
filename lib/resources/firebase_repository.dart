@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_skype_app/export_path.dart';
 
@@ -27,4 +29,13 @@ class FirebaseRepository {
   Future<void> addMessageToDb(
           Message message, SkypeUser sender, SkypeUser receiver) =>
       _firebaseMethos.addMessageToDb(message, sender, receiver);
+
+  void uploadImage({
+    File image,
+    String receiverId,
+    String senderId,
+    ImageUploadProvider imageUploadProvider,
+  }) =>
+      _firebaseMethos.uploadImage(
+          image, receiverId, senderId, imageUploadProvider);
 }

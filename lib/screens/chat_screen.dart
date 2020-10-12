@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_skype_app/export_path.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class ChatScreen extends StatefulWidget {
   final SkypeUser receiver;
@@ -18,6 +22,8 @@ class _ChatScreenState extends State<ChatScreen> {
   FirebaseRepository _repository = FirebaseRepository();
 
   ScrollController _listScrollController = ScrollController();
+
+  ImageUploadProvider _imageUploadProvider;
 
   SkypeUser sender;
   String _currentUserId;
@@ -60,6 +66,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _imageUploadProvider = Provider.of<ImageUploadProvider>(context);
+
     return Scaffold(
       backgroundColor: UniversalVariables.blackColor,
       appBar: customAppBar(context),
@@ -68,6 +76,13 @@ class _ChatScreenState extends State<ChatScreen> {
           Flexible(
             child: messageList(),
           ),
+          _imageUploadProvider.getViewState == ViewState.LOADING
+              ? Container(
+                  alignment: Alignment.centerRight,
+                  margin: EdgeInsets.only(right: 15),
+                  child: CircularProgressIndicator(),
+                )
+              : Container(),
           chatControls(),
           showEmojiPicker
               ? Container(
@@ -171,13 +186,17 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   getMessage(Message message) {
-    return Text(
-      message.message,
-      style: TextStyle(
-        color: Colors.white,
-        fontSize: 16.0,
-      ),
-    );
+    return message.type != MESSAGE_TYPE_IMAGE
+        ? Text(
+            message.message,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16.0,
+            ),
+          )
+        : message.photoUrl != null
+            ? CachedImage(url: message.photoUrl)
+            : Text("Url Lost");
   }
 
   Widget receiverLayout(Message message) {
@@ -250,6 +269,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         title: 'media',
                         subtitle: 'Share photos and video',
                         icon: Icons.image,
+                        onTap: () => pickImage(source: ImageSource.gallery),
                       ),
                       ModalTile(
                           title: "File",
@@ -365,8 +385,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
           isWriting
               ? Container()
-              : Icon(
-                  Icons.camera_alt,
+              : GestureDetector(
+                  onTap: () => pickImage(source: ImageSource.camera),
+                  child: Icon(
+                    Icons.camera_alt,
+                  ),
                 ),
           isWriting
               ? Container(
@@ -386,6 +409,16 @@ class _ChatScreenState extends State<ChatScreen> {
               : Container(),
         ],
       ),
+    );
+  }
+
+  pickImage({@required ImageSource source}) async {
+    File selectedImage = await Utils.pickImage(source: source);
+    _repository.uploadImage(
+      image: selectedImage,
+      receiverId: widget.receiver.uid,
+      senderId: _currentUserId,
+      imageUploadProvider: _imageUploadProvider,
     );
   }
 
